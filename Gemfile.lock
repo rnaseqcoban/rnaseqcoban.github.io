@@ -263,9 +263,8 @@ PLATFORMS
 
 DEPENDENCIES
   github-pages
-  jekyll (~> 3.9.0)
+  jekyll
   just-the-docs
-  minima (~> 2.5)
 
 BUNDLED WITH
    2.2.11
