@@ -53,7 +53,7 @@ plugins:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
-theme: just-the-docs
+remote_theme: pmarsceill/just-the-docs
 
 # Color scheme supports "light" (default) and "dark"
 color_scheme: scvn
