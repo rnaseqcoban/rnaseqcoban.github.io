@@ -16,3 +16,5 @@ gem "jekyll"
 
 gem "just-the-docs"
 gem "github-pages"
+
+gem "jekyll-remote-theme"
