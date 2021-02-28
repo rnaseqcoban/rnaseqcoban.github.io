@@ -16,7 +16,7 @@ Source:
 # 2. Dữ liệu
 
 ```R
-brain <- readRDS(file = "brain_seurat.RDS")
+pbmc <- readRDS(file = "PBMC_1k.RDS")
 ```
 
 # 3. Tính tỷ lệ mitochondria
@@ -26,42 +26,65 @@ head(brain@meta.data)
 ```
 
 ```console
-                           orig.ident nCount_RNA nFeature_RNA  mouse well        type
-A1.B003290.3_38_F.1.1   SeuratProject     390075         3359 3_38_F   A1    Striatum
-A1.B003728.3_56_F.1.1   SeuratProject     776439         1718 3_56_F   A1    Striatum
-A1.MAA000560.3_10_M.1.1 SeuratProject    1616087         3910 3_10_M   A1      Cortex
-A1.MAA000564.3_10_M.1.1 SeuratProject     360004         4352 3_10_M   A1    Striatum
-A1.MAA000923.3_9_M.1.1  SeuratProject     290282         2248  3_9_M   A1 Hippocampus
-A1.MAA000930.3_8_M.1.1  SeuratProject     574628          948  3_8_M   A1      Cortex
+                      orig.ident nCount_RNA nFeature_RNA
+AAACCCAAGGAGAGTA-1 SeuratProject       8288         2620
+AAACGCTTCAGCCCAG-1 SeuratProject       5512         1808
+AAAGAACAGACGACTG-1 SeuratProject       4283         1562
+AAAGAACCAATGGCAG-1 SeuratProject       2754         1225
+AAAGAACGTCTGCAAT-1 SeuratProject       6592         1831
+AAAGGATAGTAGACAT-1 SeuratProject       8845         2048
 ```
 
 ```R
-mt.genes <- rownames(brain)[grep("^Mt-",rownames(brain))]
-C<-GetAssayData(object = brain, slot = "counts")
+# Tìm mitochondiral genes bắt đầu bằng MT-
+mt.genes <- rownames(pbmc)[grep("^MT-",rownames(pbmc))]
+# Lấy count matrix từ Seurat
+C<-GetAssayData(object = pbmc, slot = "counts")
 
-percent.mito <- colSums(C[mt.genes,])/Matrix::colSums(C)*100
-brain <- AddMetaData(brain, percent.mito, col.name = "percent.mito")
+# Tính phần trăm mt genes
+percent.mito <- Matrix::colSums(C[mt.genes,])/Matrix::colSums(C)*100
+# Đưa kết quả % mt genes vào bảng metadata
+pbmc <- AddMetaData(pbmc, percent.mito, col.name = "percent.mito")
 ```
 
 
 ```R
-rb.genes <- rownames(brain)[grep("^Rp[sl]",rownames(brain))]
-percent.ribo <- colSums(C[rb.genes,])/Matrix::colSums(C)*100
-brain <- AddMetaData(brain, percent.ribo, col.name = "percent.ribo")
+rb.genes <- rownames(pbmc)[grep("^RP[SL]",rownames(pbmc))]
+percent.ribo <-  Matrix::colSums(C[rb.genes,])/Matrix::colSums(C)*100
+pbmc <- AddMetaData(pbmc, percent.ribo, col.name = "percent.ribo")
 ```
 
 ```R
-VlnPlot(brain, features = "nFeature_RNA", pt.size = 0.1) + NoLegend()
+VlnPlot(pbmc, features = "nFeature_RNA", pt.size = 0.1) + NoLegend()
+```
+![](images/part3/plot_3_1.png)
+```R
+VlnPlot(pbmc, features = "nCount_RNA", pt.size = 0.1) + NoLegend()
+```
+![](images/part3/plot_3_2.png)
+```R
+VlnPlot(pbmc, features = "percent.mito", pt.size = 0.1) + NoLegend()
+```
+![](images/part3/plot_3_3.png)
+```R
+VlnPlot(pbmc, features = "percent.ribo", pt.size = 0.1) + NoLegend()
+```
+![](images/part3/plot_3_4.png)
+```R
+FeatureScatter(pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
+```
+![](images/part3/plot_3_5.png)
+```R
+FeatureScatter(pbmc, feature1 = "nFeature_RNA", feature2 = "percent.mito")
+```
+![](images/part3/plot_3_6.png)
+```R
+pbmc <- subset(pbmc, subset = nFeature_RNA > 1000 & nFeature_RNA < 4000 & percent.mito < 25)
 ```
 
 ```R
-VlnPlot(brain, features = "nCount_RNA", pt.size = 0.1) + NoLegend()
+VlnPlot(pbmc, features = "nFeature_RNA", pt.size = 0.1) + NoLegend()
 ```
+![](images/part3/plot_3_7.png)
 
-```R
-VlnPlot(brain, features = "percent.ribo", pt.size = 0.1) + NoLegend()
-```
 
-```R
-FeatureScatter(brain, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
-```

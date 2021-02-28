@@ -9,20 +9,25 @@ Source:
 
 [https://scrnaseq-course.cog.sanger.ac.uk/website/tabula-muris.html](https://scrnaseq-course.cog.sanger.ac.uk/website/tabula-muris.html)
 
+# A. Giới thiệu
 
-# 1. Dữ liệu Tabula Muris
+Để hiểu chi tiết về cách đọc dữ liệu, phần đầu tiên bạn sẽ sử dụng dữ liệu Tabula Muris từ file count matrix và metadata. Rồi sau đó sẽ tạo 2 loại object là SingleCellExperiment và Seurat. Ở phần thứ 2,bạn sẽ sử dụng cách đọc ngắn gọn hơn với dữ liệu PMBC từ 10X Genomics theo định dạng .H5. Và từ những tutorial sau cũng sẽ chỉ làm việc với dữ liệu này.
 
-Trong toàn bộ phần hướng dẫn này, chúng ta sẽ sử dụng dữ liệu scRNAseq từ dự án Tabula Muris. Đây là dự án hợp tác quốc tế nhằm tìm ra thông tin sinh học phân tử của tất của các loại tế bào trên chuột ở cấp độ phiên mã (transcriptomics level). Họ kết hợp giữa giải trình tự thông lượng cao, có độ phủ thấp 10X (tên platform) với giải trình tự thông lượng thấp, độ phủ cao FACS-sorted cells Smartseq2 (tên của platform). Ở blog này, chúng ta sẽ chỉ sử dụng dữ liệu Smartseq2.
+# B. Phần 1
+
+## 1. Dữ liệu Tabula Muris
+
+Trong phần hướng dẫn này, chúng ta sẽ sử dụng dữ liệu scRNAseq từ dự án Tabula Muris. Đây là dự án hợp tác quốc tế nhằm tìm ra thông tin sinh học phân tử của tất của các loại tế bào trên chuột ở cấp độ phiên mã (transcriptomics level). Họ kết hợp giữa giải trình tự thông lượng cao, có độ phủ thấp 10X (tên platform) với giải trình tự thông lượng thấp, độ phủ cao FACS-sorted cells Smartseq2 (tên của platform). Ở blog này, chúng ta sẽ chỉ sử dụng dữ liệu Smartseq2.
 
 Dữ liệu này lần đầu tiên công bố vào tháng 12 năm 2017, bao gồm khoảng 100,000 tế bào thu thập được từ các mô/cơ quan khác nhau của chuột. Các bạn có thể dựa vào code trong phần hướng dẫn để thay đổi loại mô/cơ quan mà các bạn muốn phân tích.
 
-# 2. Tải dữ liệu scRNAseq
+## 2. Tải dữ liệu scRNAseq
 
 Dữ liệu Tabula Muris từ não chuột có thể download được từ đây: [Link Download](https://github.com/chanzuckerberg/scRNA-python-workshop/blob/master/content/data.zip).
 
 Sau khi tải về, bạn giải nén và giữ lại 2 files: `brain_counts.csv` và `brain_metadata.csv`.
 
-# 3. Đọc dữ liệu
+## 3. Đọc dữ liệu
 
 Chúng ta có thể đọc dữ liệu ma trận count (count có nghĩa là số lượng reads chồng lên nhau ở mỗi gene khi giải trình tự) từ file .csv. Sau đó quan sát thử dataframe (bảng):
 ```R
@@ -84,10 +89,10 @@ ann <- ann[match(cellIDs, ann[,1]),]
 celltype <- ann[,3]
 ```
 
-# 4. Tạo object
+## 4. Tạo object
 Để tính toán hiệu quả hơn thì chúng ta cần đưa các dữ liệu vào các loại object khác nhau và tính toán toàn bộ xung quanh object đó. Ở đây chúng ta sẽ thử 2 loại object khác nhau là SingleCellExperiment và Seurat object (xem thêm ở phần setup).
 
-## 4.1. SingleCellExperiment
+### 4.1. SingleCellExperiment
 Để tạo ra SingleCellExperiment object, chúng ta cần đưa tất cả thông tin chú giải tế bào vào 1 dataframe duy nhất.
 
 ```R
@@ -100,7 +105,7 @@ rownames(cell_anns) <- rownames(dat)
 sceset <- SingleCellExperiment(assays = list(counts = as.matrix(t(dat))), colData=cell_anns)
 ```
 
-## 4.2. Seurat
+### 4.2. Seurat
 Seurat là một trong những package phổ biến nhất hiện tại trong xử lý dữ liệu scRNAseq.
 
 ```R
@@ -132,4 +137,52 @@ Sau đó, bạn có thể đọc lại Seurat object bất cứ lúc nào:
 brain <- readRDS(file = "brain_seurat.RDS")
 ```
 
-Từ các tutorial sau, chúng ta sẽ chỉ sử dụng Seurat object để phân tích dữ liệu.
+# C. Phần 2
+
+## 1. Dữ liệu Peripheral blood mononuclear cells (PBMC)
+
+Dữ liệu PBMCs là dữ liệu scRNAseq miễn phí từ công ty 10X Genomics. PBMSs là các tế bào đơn nhân trong máu ngoại vi. Trong bài này chúng ta sẽ sử dụng mẫu từ những người hiến tặng khỏa mạnh.
+
+## 2. Tải dữ liệu scRNAseq
+
+Sẽ có 2 cách để tải như sau:
+
+
+- Cách 1: Bạn có thể tải miễn phí tại [Link](https://support.10xgenomics.com/single-cell-gene-expression/datasets/3.0.0/pbmc_1k_v3). Để tải thì cần cung cấp một số thông tin cho họ. Sau khi điền xong, bạn sẽ có thể tải file `Feature / cell matrix HDF5 (filtered)`.
+
+- Cách 2:
+
+Sử dụng Command promt `cmd` nếu bạn sử dụng hệ điều hành Windows hoặc terminal nếu dùng MacOS:
+
+```console
+curl -O https://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_v3/pbmc_1k_v3_filtered_feature_bc_matrix.h5
+```
+
+- Sử dụng terminal trong Linux
+
+```console
+wget https://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_v3/pbmc_1k_v3_filtered_feature_bc_matrix.h5
+```
+
+## 3. Đọc dữ liệu
+
+Seurat cung cấp 1 function để đọc dữ liệu từ file `.h5` là `Read10X_h5`.
+
+```R
+v3 <- Read10X_h5("./pbmc_1k_v3_filtered_feature_bc_matrix.h5")
+```
+
+v3 lúc này sẽ là count matrix ở dạng sparse matrix giúp tối ưu việc lưu trữ dữ liệu. Về cơ bản cũng là một count matrix để chúng ta có thể đưa vào Seurat object.
+
+## 4. Tạo object
+
+Đưa dữ liệu PBMCs và tạo Seurat object.
+
+```R
+# Tạo Seurat object
+pbmc <- CreateSeuratObject(counts = v3, project = "pbmc_1k_v3")
+# Lưu lại Seurat object
+saveRDS(pbmc, file = "PBMC_1k.RDS")
+```
+
+Từ những tutorial sau, chúng ta sẽ sử dụng Seurat object của PBMC để phân tích.
