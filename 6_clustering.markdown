@@ -29,20 +29,20 @@ Computing SNN
 ```
 
 ```R
-pbmc <- FindClusters(pbmc, resolution = 0.5, algorithm = 1)
+pbmc <- FindClusters(pbmc, resolution = 0.4, algorithm = 1)
 ```
 ```console
 Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
 
 Number of nodes: 1062
-Number of edges: 35305
+Number of edges: 41527
 
 Running Louvain algorithm...
 0%   10   20   30   40   50   60   70   80   90   100%
 [----|----|----|----|----|----|----|----|----|----|
 **************************************************|
-Maximum modularity in 10 random starts: 0.8791
-Number of communities: 8
+Maximum modularity in 10 random starts: 0.8916
+Number of communities: 6
 Elapsed time: 0 seconds
 ```
 

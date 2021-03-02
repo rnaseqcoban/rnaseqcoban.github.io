@@ -65,27 +65,27 @@ pbmc <- AddMetaData(pbmc, percent.ribo, col.name = "percent.ribo")
 ```R
 VlnPlot(pbmc, features = "nFeature_RNA", pt.size = 0.1) + NoLegend()
 ```
-![](images/part3/plot_3_1.png)
+![](../assets/images/part3/plot_3_1.png)
 ```R
 VlnPlot(pbmc, features = "nCount_RNA", pt.size = 0.1) + NoLegend()
 ```
-![](images/part3/plot_3_2.png)
+![](../assets/images/part3/plot_3_2.png)
 ```R
 VlnPlot(pbmc, features = "percent.mito", pt.size = 0.1) + NoLegend()
 ```
-![](images/part3/plot_3_3.png)
+![](../assets/images/part3/plot_3_3.png)
 ```R
 VlnPlot(pbmc, features = "percent.ribo", pt.size = 0.1) + NoLegend()
 ```
-![](images/part3/plot_3_4.png)
+![](../assets/images/part3/plot_3_4.png)
 ```R
 FeatureScatter(pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
 ```
-![](images/part3/plot_3_5.png)
+![](../assets/images/part3/plot_3_5.png)
 ```R
 FeatureScatter(pbmc, feature1 = "nFeature_RNA", feature2 = "percent.mito")
 ```
-![](images/part3/plot_3_6.png)
+![](../assets/images/part3/plot_3_6.png)
 ```R
 pbmc <- subset(pbmc, subset = nFeature_RNA > 1000 & nFeature_RNA < 4000 & percent.mito < 25)
 ```
@@ -93,6 +93,6 @@ pbmc <- subset(pbmc, subset = nFeature_RNA > 1000 & nFeature_RNA < 4000 & percen
 ```R
 VlnPlot(pbmc, features = "nFeature_RNA", pt.size = 0.1) + NoLegend()
 ```
-![](images/part3/plot_3_7.png)
+![](../assets/images/part3/plot_3_7.png)
 
 

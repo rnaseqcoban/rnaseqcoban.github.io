@@ -41,26 +41,26 @@ print(x = head(x = cluster1.markers, n = 5))
 ```
 
 ```console
-            p_val avg_logFC pct.1 pct.2    p_val_adj
-IL7R 1.963908e-63 1.2187234 0.893 0.292 6.586554e-59
-TRAC 1.591017e-53 0.9225490 0.932 0.380 5.335953e-49
-IL32 7.534694e-52 0.9455882 0.927 0.328 2.526986e-47
-LDHB 1.350431e-51 0.8313688 0.971 0.714 4.529077e-47
-CD2  1.015116e-50 0.7672408 0.791 0.238 3.404496e-46
+                p_val avg_logFC pct.1 pct.2     p_val_adj
+S100A12 4.698018e-208  3.102009 0.967 0.015 1.575621e-203
+VCAN    7.589032e-207  2.811492 0.980 0.029 2.545210e-202
+MNDA    2.392414e-200  2.504461 0.993 0.058 8.023677e-196
+MS4A6A  6.548670e-198  2.015251 0.967 0.030 2.196293e-193
+FCN1    2.352186e-197  2.547167 0.990 0.049 7.888762e-193
 ```
 
 ```R
 # find all markers distinguishing cluster 5 from clusters 0 and 3
-cluster5.markers <- FindMarkers(object = pbmc, ident.1 = 2, ident.2 = c(0, 3), min.pct = 0.25)
-print(x = head(x = cluster5.markers, n = 5))
+cluster2.markers <- FindMarkers(object = pbmc, ident.1 = 2, ident.2 = c(0, 3), min.pct = 0.25)
+print(x = head(x = cluster2.markers, n = 5))
 ```
 ```console
-             p_val avg_logFC pct.1 pct.2     p_val_adj
-CD3E 6.885642e-121  1.889710 0.988 0.016 2.309307e-116
-CD3D 8.068824e-121  1.863903 0.975 0.009 2.706122e-116
-TRAC 6.004612e-105  1.930913 0.963 0.067 2.013827e-100
-IL7R 3.483779e-104  1.961180 0.894 0.018  1.168390e-99
-TCF7 3.630007e-103  1.670272 0.925 0.046  1.217432e-98
+                 p_val avg_logFC pct.1 pct.2     p_val_adj
+CD79A    1.048544e-131  2.850362 0.963 0.020 3.516606e-127
+MS4A1    4.615700e-125  2.399839 0.936 0.026 1.548013e-120
+BANK1    4.149180e-119  1.805717 0.888 0.016 1.391552e-114
+HLA-DQA1 6.781299e-119  1.980109 0.973 0.053 2.274312e-114
+IGHM     2.290497e-116  3.537477 0.882 0.022 7.681869e-112
 ```
 
 ```R
@@ -82,10 +82,6 @@ Calculating cluster 4
   |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=01s  
 Calculating cluster 5
   |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=01s  
-Calculating cluster 6
-  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=03s  
-Calculating cluster 7
-  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=03s
 ```
 
 Seurat has several tests for differential expression which can be set with the test.use parameter (see our DE vignette for details). For example, the ROC test returns the ‘classification power’ for any individual marker (ranging from 0 - random, to 1 - perfect).
@@ -97,7 +93,7 @@ cluster1.markers <- FindMarkers(object = pbmc, ident.1 = 0, logfc.threshold = 0.
 We include several tools for visualizing marker expression. • VlnPlot (shows expression probability distributions across clusters), • and FeaturePlot (visualizes gene expression on a tSNE or PCA plot) are our most commonly used visualizations. We also suggest exploring: • RidgePlot, • CellPlot, and • DotPlot as additional methods to view your dataset.
 
 ```R
-VlnPlot(object = pbmc, features =c("LYZ", "VCAN"))
+VlnPlot(object = pbmc, features =c("LYZ", "CD14"))
 
 FeaturePlot(object = pbmc, features = c("MS4A1", "GNLY", "CD3E", "CD14", "FCER1A", "FCGR3A", "LYZ", "PPBP", "CD8A"), cols = c("grey", "blue"), reduction = "tsne")
 ```
@@ -108,10 +104,10 @@ DoHeatmap generates an expression heatmap for given cells and genes. In this cas
 ```R
 library(dplyr)
 
-top5 <- pbmc.markers %>% group_by(cluster) %>% top_n(5, avg_logFC)
+top10 <- pbmc.markers %>% group_by(cluster) %>% top_n(10, avg_logFC)
 # setting slim.col.label to TRUE will print just the cluster IDS instead of
 # every cell name
-DoHeatmap(object = pbmc, features = top5$gene, label = TRUE)
+DoHeatmap(object = pbmc, features = top10$gene, label = TRUE)
 ```
 
 ## Assigning cell type identity to clusters
@@ -119,8 +115,8 @@ DoHeatmap(object = pbmc, features = top5$gene, label = TRUE)
 Fortunately in the case of this dataset, we can use canonical markers to easily match the unbiased clustering to known cell types.
 
 ```R
-current.cluster.ids <- c(0, 1, 2, 3, 4, 5, 6, 7)
-new.cluster.ids <- c("CD4 T cells", "CD14+ Monocytes", "B cells", "CD8 T cells", "FCGR3A+ Monocytes", "NK cells", "Dendritic cells", "Megakaryocytes")
+current.cluster.ids <- c(0, 1, 2, 3, 4, 5)
+new.cluster.ids <- c("T cells","Macrophage/Monocyte", "B cells", "GZMK+ T cells", "NK cells","Neutrophil")
 pbmc@active.ident <- plyr::mapvalues(x = pbmc@active.ident, from = current.cluster.ids, to = new.cluster.ids)
-DimPlot(object = pbmc, reduction = "tsne", label = TRUE, pt.size = 0.5)
+DimPlot(object = pbmc, reduction = "umap", label = TRUE, pt.size = 0.5)
 ```
