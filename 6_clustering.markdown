@@ -51,9 +51,10 @@ Elapsed time: 0 seconds
 ```R
 DimPlot(object = pbmc, reduction = "tsne")
 ```
-
+![](../assets/images/Part6/plot_6_1.png)
 ## Visualize by UMAP
 
 ```R
 DimPlot(pbmc, reduction = "umap")
 ```
+![](../assets/images/Part6/plot_6_2.png)

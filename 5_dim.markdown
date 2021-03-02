@@ -22,7 +22,7 @@ Mathematically, the PCs correspond to the eigenvectors of the covariance matrix.
 Biologically, this type of dimensionality reduction is useful and appropriate because cells respond to their environment by turning on regulatory programs that result in expression of modules of genes. As a result, gene expression displays structured co-expression, and dimnesionality reduction by principle component analysis groups those co-varying genes into principle components, ordered by how much variation they explain.
 
 
-Image[]
+![](../assets/images/Part5/plot_5_1.png)
 
 Now that we have a clean expression matrix, we can use PCA to visualize an overview of the data and assess confounding factors. SCANPY provides several very useful functions to simplify visualisation.
 
@@ -40,12 +40,12 @@ Seurat v3 provides functions for visualizing: - PCA - PCA plot coloured by a qua
 # Examine and visualize PCA results a few different ways
 DimPlot(object = pbmc, reduction = "pca")
 ```
-
+![](../assets/images/Part5/plot_5_2.png)
 ```R
 # Dimensional reduction plot, with cells colored by a quantitative feature
 FeaturePlot(object = pbmc, features = "MS4A1")
 ```
-
+![](../assets/images/Part5/plot_5_3.png)
 In particular DimHeatmap allows for easy exploration of the primary sources of heterogeneity in a dataset, and can be useful when trying to decide which PCs to include for further downstream analyses. Both cells and genes are ordered according to their PCA scores. Setting cells.use to a number plots the ‘extreme’ cells on both ends of the spectrum, which dramatically speeds plotting for large datasets. Though clearly a supervised analysis, we find this to be a valuable tool for exploring correlated gene sets.
 
 ## Determine statistically significant principal components
@@ -64,14 +64,14 @@ pbmc <- ScoreJackStraw(object = pbmc, dims = 1:20, reduction = "pca")
 
 JackStrawPlot(object = pbmc, dims = 1:20, reduction = "pca")
 ```
-
+![](../assets/images/Part5/plot_5_5.png)
 
 A more ad hoc method for determining which PCs to use is to look at a plot of the standard deviations of the principle components and draw your cutoff where there is a clear elbow in the graph. This can be done with ElbowPlot. In this example, it looks like the elbow would fall around PC 5.
 
 ```R
 ElbowPlot(object = pbmc)
 ```
-
+![](../assets/images/Part5/plot_5_6.png)
 ## Run Non-linear dimensional reduction (tSNE)
 
 An alternative to PCA for visualizing scRNASeq data is a tSNE plot. tSNE (t-Distributed Stochastic Neighbor Embedding) combines dimensionality reduction (e.g. PCA) with random walks on the nearest-neighbour network to map high dimensional data (i.e. our 18,585 dimensional expression matrix) to a 2-dimensional space. In contrast with PCA, tSNE can capture nonlinear structure in the data, and tries to preserve the local distances between cells. Due to the non-linear and stochastic nature of the algorithm, tSNE is more difficult to intuitively interpret: while tSNE faithfully represents local relationships, it doesn't always capture the relatioships between more distant cells correctly.
@@ -83,7 +83,7 @@ pbmc <- RunTSNE(object = pbmc, dims.use = 1:10, do.fast = TRUE)
 # note that you can set do.label=T to help label individual clusters
 DimPlot(object = pbmc, reduction = "tsne")
 ```
-
+![](../assets/images/Part5/plot_5_7.png)
 ## Run UMAP
 
 UMAP (Uniform Approximation and Projection) is another nonlinear dimensionality reduction method. Like tSNE, UMAP is nondeterministic and requires that we fix the random seed to ensure reproducibility. While tSNE optimizes for local structure, UMAP tries to balance the preservation of local and global structure. For this reason, we prefer UMAP over tSNE for exploratory analysis and general visualization.
@@ -92,3 +92,4 @@ UMAP (Uniform Approximation and Projection) is another nonlinear dimensionality 
 pbmc <- RunUMAP(pbmc, reduction = "pca", dims = 1:20)
 DimPlot(pbmc, reduction = "umap")
 ```
+![](../assets/images/Part5/plot_5_8.png)

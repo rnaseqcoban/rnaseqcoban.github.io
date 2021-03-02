@@ -95,9 +95,13 @@ We include several tools for visualizing marker expression. • VlnPlot (shows e
 ```R
 VlnPlot(object = pbmc, features =c("LYZ", "CD14"))
 
+```
+![](../assets/images/Part7/plot_7_1.png)
+
+```R
 FeaturePlot(object = pbmc, features = c("MS4A1", "GNLY", "CD3E", "CD14", "FCER1A", "FCGR3A", "LYZ", "PPBP", "CD8A"), cols = c("grey", "blue"), reduction = "tsne")
 ```
-
+![](../assets/images/Part7/plot_7_2.png)
 DoHeatmap generates an expression heatmap for given cells and genes. In this case, we are plotting the top 20 markers (or all markers if less than 20) for each cluster.
 
 
@@ -109,7 +113,7 @@ top10 <- pbmc.markers %>% group_by(cluster) %>% top_n(10, avg_logFC)
 # every cell name
 DoHeatmap(object = pbmc, features = top10$gene, label = TRUE)
 ```
-
+![](../assets/images/Part7/plot_7_4.png)
 ## Assigning cell type identity to clusters
 
 Fortunately in the case of this dataset, we can use canonical markers to easily match the unbiased clustering to known cell types.
@@ -120,3 +124,4 @@ new.cluster.ids <- c("T cells","Macrophage/Monocyte", "B cells", "GZMK+ T cells"
 pbmc@active.ident <- plyr::mapvalues(x = pbmc@active.ident, from = current.cluster.ids, to = new.cluster.ids)
 DimPlot(object = pbmc, reduction = "umap", label = TRUE, pt.size = 0.5)
 ```
+![](../assets/images/Part7/plot_7_4.png)
