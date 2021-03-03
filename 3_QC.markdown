@@ -66,6 +66,7 @@ pbmc <- AddMetaData(pbmc, percent.ribo, col.name = "percent.ribo")
 VlnPlot(pbmc, features = "nFeature_RNA", pt.size = 0.1) + NoLegend()
 ```
 ![](../assets/images/Part3/plot_3_1.png)
+
 ```R
 VlnPlot(pbmc, features = "nCount_RNA", pt.size = 0.1) + NoLegend()
 ```

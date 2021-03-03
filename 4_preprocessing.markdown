@@ -16,20 +16,17 @@ Source:
 https://broadinstitute.github.io/KrumlovSingleCellWorkshop2020/data-wrangling-scrnaseq-1.html
 
 
-## Normalizing cell library size 
+## 1. Chuẩn hóa [library](https://en.wikipedia.org/wiki/CDNA_library) size tế bào
 
-One factor that contributes variation to single-cell RNA-sequencing experiments is called "Library size variation". Library sizes vary for many reasons, including natural differences in cell size, variation of RNA capture, variation in the efficiency of PCR amplification used to generate enough RNA to create the sequencing library. In addition, because scRNA-seq data is often sequenced on highly multiplexed platforms, and the total reads which are derived from each cell may differ substantially.
+Một yếu tố góc phần tạo ra sự sai khác đối với dữ liệu scRNAseq là "Library size variation". Library sizes khác nhau vì rất nhiều lý do, bao gồm sự khác nhau tự nhiên giữa kích cỡ các tế bào, khả năng capture được RNA hay hiệu quả khuếch đại PCR khi sử dụng để tạo ra đủ RNA giúp giải trình tự. Ngoài ra, vì dữ liệu scRNAseq thường được giải trình tự bằng các multiplex platform (giải trình tự gộp nhiều mẫu), do đó tổng số reads được lấy ra từ từng tế bào có thể khác nhau đáng kể giữa các mẫu.   
 
-As a result, while the volume of a cell is informative of a cell's phenotype, there is much more variation in size due to technical factors, and so cells are commonly normalized to have comparable RNA content, becuase this is known to exclude much more technical than biological variation. However, it is important to note that all reasoning about differences between cells after this normalization occurs is restricted to asking question about the relative, not absolute, abundance of RNA in one cell vs another.
+Nhìn vào kết quả, chúng ta thấy rằng thể tích của tế bào có thể cung cấp thông tin về kiểu hình của tế bào đó, tuy nhiên sự khác nhau này lại có thể do các yếu tố kỹ thuật. Vì vậy, dữ liệu của scRNAseq thường được chuẩn hóa để có hàm lượng RNA tương đương giữa các tế bào, giúp loại bỏ các lỗi kỹ thuật hơn là thay đổi về mặt sinh học. Một điều quna trọng cần lưu ý đó là tất cả các lý luận về sự khác biệt giữa các tế bào sau khi quá trình chuẩn hóa này xảy ra sẽ bị hạn chế trong việc đặt câu hỏi về bài toán sinh học. Có nghĩa là mọi so sánh sẽ chỉ mang tính tương đối, không phải tuyệt đối.
 
-Some quantification methods (eg. Cufflinks, RSEM) incorporate library size when determining gene expression estimates and thus do not require this normalization. However, if another quantification method was used then library size must be corrected for.
+Một số phương pháp định lượng đã kết hợp library size khi ước tính gene expression và không cần đến bước chuẩn hóa này (về cơ bản nó đã tích hợp bước này rồi). Còn lại hầu hết các phương pháp khác bắt buộc phải chuẩn hóa cho phù hợp.
 
-There are two main approaches to this correction. Many methods use a simple linear scaling to adjust counts such that each cell (row) has about the same total library size. Examples include converting to counts per million (CPM) and closely related methods such as scran. While simple, these approaches do a reasonable job of correcting for differences in library size.
+Có hai cách tiếp cận chính để chuẩn hóa. Một nhóm các phương pháp sử dụng scale tuyến tính đơn giản (ví dụ như đưa về thang 0-1) để điều chỉnh sao cho mỗi tế bào có cùng library size. Một nhóm khác thì phức tạp hơn, thường liên quan tới mô hình tham số của dữ liệu count để thực hiện chuẩn hóa phi tuyến tính. Các phương pháp này hữu ích khi có nhiều nguồn variation không mong muốn (ví dụ: sự không đồng nhất mạnh giữa kích thước các tế bào trong 1 mô).
 
-Other methods are more complex, and generally involve parametric modeling of count data to perform nonlinear normalization. These methods are useful when there are more complex sources of unwanted variation (e.g., for highly heterogeneous populations of cells with different sizes).
-
-
-After removing unwanted genes cells from the dataset, the next step is to normalize the data. By default, we employ a global-scaling normalization method “LogNormalize” that normalizes the gene expression measurements for each cell by the total expression, multiplies this by a scale factor (10,000 by default), and log-transforms the result. There have been many methods to normalize the data, but this is the simplest and the most intuitive. The division by total expression is done to change all expression counts to a relative measure, since experience has suggested that technical factors (e.g. capture rate, efficiency of reverse transcription) are largely responsible for the variation in the number of molecules per cell, although genuine biological factors (e.g. cell cycle stage, cell size) also play a smaller, but non-negligible role. The log-transformation is a commonly used transformation that has many desirable properties, such as variance stabilization (can you think of others?).
+Ở phần này, chúng ta sẽ sử dụng phương pháp chuẩn hóa theo global-scaling `LogNormalize` để chuẩn hóa các phép đo gene expression cho mỗi tế bào với tổng lượng gene expression, nhân giá trị này với hệ số tỷ lệ (mặc định là 10.000) và biến đổi hàm log cho kết quả. Có rất nhiều phương pháp để chuẩn hóa dữ liệu, nhưng đây là phương pháp đơn giản và trực quan nhất. Phép chia cho tổng gene expression được thực hiện để thay đổi tất cả các số lượng gene expression thành một số đo tương đối. Kinh nghiệm cho thấy rằng các yếu tố kỹ thuật (ví dụ tỷ lệ capture được RNA, hiệu quả của phiên mã ngược) chịu trách nhiệm phần lớn cho sự thay đổi số lượng phân tử RNA trên mỗi tế bào. Ngoài ra, các yếu tố sinh học (ví dụ giai đoạn chu kỳ tế bào, kích thước tế bào) cũng đóng một vai trò không nhỏ. Phép biến đổi log là một phép biến đổi thường được sử dụng do có nhiều đặc tính chúng ta mong muốn, chẳng hạn như sự ổn định về phương sai. Chúng ta sẽ sử dụng hàm `NormalizeData` trong Seurat.
 
 ```R
 pbmc <- NormalizeData(object = pbmc, normalization.method = "LogNormalize", scale.factor = 1e4)
@@ -42,11 +39,9 @@ Performing log-normalization
 **************************************************|
 ```
 
-A potential drawback of CPM is if your sample contains genes that are both very highly expressed and differentially expressed across the cells. In this case, the total molecules in the cell may depend of whether such genes are on/off in the cell and normalizing by total molecules may hide the differential expression of those genes and/or falsely create differential expression for the remaining genes. One way to mitigate this is to exclude highly expressed genes from the size factor estimation.
+## 2. Phát hiện các gene biến đổi giữa các tế bào
 
-## Detection of variable genes across the single cells
-
-Seurat calculates highly variable genes and focuses on these for downstream analysis. FindVariableFeatures calculates the average expression and dispersion for each gene, places these genes into bins, and then calculates a z-score for dispersion within each bin. This helps control for the relationship between variability and average expression. This function is unchanged from (Macosko et al.), but new methods for variable gene expression identification are coming soon. We suggest that users set these parameters to mark visual outliers on the dispersion plot, but the exact parameter settings may vary based on the data type, heterogeneity in the sample, and normalization strategy. The parameters here identify ~3,000 variable genes, and represent typical parameter settings for UMI data that is normalized to a total of 1e4 molecules.
+Seurat tính toán các gen có khả năng thay đổi cao và sẽ tập trung vào những gen này để áp dụng các phân tích về sau. `FindVariableFeatures` là hàm tính gene expression trung bình và độ phân tán cho mỗi gen, đặt các gen này vào các [bins](https://docs.tibco.com/pub/spotfire/7.0.1/doc/html/bin/bin_what_is_binning.htm), sau đó tính z-score cho sự phân tán trong mỗi bin. Điều này giúp kiểm soát mối quan hệ giữa độ biến thiên và gene expression trung bình. Người dùng nên đặt các thông số này để biểu đồ phân tán trở nên trực quan hơn. Nhưng để cài đặt thông số chính xác thì phải dựa trên loại dữ liệu thực tế, tính không đồng nhất giữa các mẫu và chiến lược chuẩn hóa. Các tham số ở đây xác định ~ 2,000 gen biến đổi và thường chúng ta sử dụng tham số điển hình cho dữ liệu UMI được chuẩn hóa với tổng số 1e4 phân tử.
 
 
 ```R
@@ -83,14 +78,10 @@ plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
 plot2
 ```
 ![](../assets/images/Part4/plot.png)
-## Scaling the data and removing unwanted sources of variation
 
-Your single cell dataset likely contains ‘uninteresting’ sources of variation. This could include not only technical noise, but batch effects, or even biological sources of variation (cell cycle stage). As suggested in Buettner et al, NBT, 2015, regressing these signals out of the analysis can improve downstream dimensionality reduction and clustering. To mitigate the effect of these signals, Seurat constructs linear models to predict gene expression based on user-defined variables. The scaled z-scored residuals of these models are stored in the scale.data slot, and are used for dimensionality reduction and clustering.
+## 3. Scale dữ liệu và loại bỏ các nguồn variation không mong muốn
 
-We can regress out cell-cell variation in gene expression driven by batch (if applicable), cell alignment rate (as provided by Drop-seq tools for Drop-seq data), the number of detected molecules, and mitochondrial gene expression. For cycling cells, we can also learn a ‘cell-cycle’ score (see example here) and regress this out as well. In this simple example here for post-mitotic blood cells, we regress on the number of detected molecules per cell as well as the percentage mitochondrial gene content.
-
-Seurat v2.0 implements this regression as part of the data scaling process. Therefore, the RegressOut function has been deprecated, and replaced with the vars.to.regress argument in ScaleData.
-
+Tập dữ liệu tế bào của bạn có thể chứa các nguồn variation không mong muốn. Không chỉ bao gồm các yếu tố gây nhiễu về mặt kỹ thuật, mà còn cả [batch effect](https://en.wikipedia.org/wiki/Batch_effect) (hiệu ứng lô/mẫu), hoặc thậm chí là các nguồn biến đổi sinh học (các giai đoạn chu kỳ tế bào khác nhau). Hồi quy những tín hiệu này ra khỏi phân tích có thể cải thiện việc giảm số chiều và phân nhóm sau này. Để giảm thiểu ảnh hưởng của những tín hiệu này, Seurat xây dựng các mô hình tuyến tính để dự đoán gene expression dựa trên các biến do người dùng xác định. [Z-score](https://www.investopedia.com/ask/answers/021115/what-difference-between-standard-deviation-and-z-score.asp) (thang chuẩn hóa) residual của các mô hình này được lưu trữ trong `scale.data` và được sử dụng để giảm số chiều và phân nhóm.
 
 ```R
 pbmc <- ScaleData(object = pbmc, vars.to.regress = c("nCounts_RNA", "percent.mito"))
