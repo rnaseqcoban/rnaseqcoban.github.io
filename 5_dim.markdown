@@ -11,6 +11,8 @@ Source:
 
 [https://chanzuckerberg.github.io/scRNA-python-workshop/analysis/03-dimensionality-reduction.html](https://chanzuckerberg.github.io/scRNA-python-workshop/analysis/03-dimensionality-reduction.html)
 
+# Giảm chiều dữ liệu (Dimensionality reduction)
+
 ## Principle components analysis
 
 Dimensionality reduction methods seek to take a large set of variables and return a smaller set of components that still contain most of the information in the original dataset.

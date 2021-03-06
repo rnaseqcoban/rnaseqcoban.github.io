@@ -11,6 +11,8 @@ Source:
 
 [https://nbisweden.github.io/excelerate-scRNAseq/session-qc/Quality_control.html](https://nbisweden.github.io/excelerate-scRNAseq/session-qc/Quality_control.html)
 
+# Kiểm soát chất lượng dữ liệu (Quality control)
+
 ## 1. Giới thiệu
 
 Once we have our expression matrix, it should be examined to remove poor quality cells which were not detected in the initial processing of the raw reads. Failure to remove low quality cells at this stage may add technical noise which has the potential to obscure the biological signals of interest in the downstream analysis.

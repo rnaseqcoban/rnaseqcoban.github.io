@@ -13,7 +13,7 @@ Source:
 
 Để hiểu chi tiết về cách đọc dữ liệu, phần đầu tiên bạn sẽ sử dụng dữ liệu Tabula Muris từ file count matrix và metadata. Rồi sau đó sẽ tạo 2 loại object là SingleCellExperiment và Seurat. Ở phần thứ 2,bạn sẽ sử dụng cách đọc ngắn gọn hơn với dữ liệu PMBC từ 10X Genomics theo định dạng .H5. Và từ những tutorial sau cũng sẽ chỉ làm việc với dữ liệu này.
 
-# B. Phần 1: Tabula Muris
+# Phần 1: Tabula Muris
 
 ## 1. Dữ liệu Tabula Muris
 
@@ -137,7 +137,7 @@ Sau đó, bạn có thể đọc lại Seurat object bất cứ lúc nào:
 brain <- readRDS(file = "brain_seurat.RDS")
 ```
 
-# C. Phần 2: PBMC
+# Phần 2: PBMC
 
 ## 1. Dữ liệu Peripheral blood mononuclear cells (PBMC)
 

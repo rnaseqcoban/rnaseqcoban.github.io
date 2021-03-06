@@ -11,13 +11,15 @@ Source:
 
 [https://chanzuckerberg.github.io/scRNA-python-workshop/analysis/04-clustering.html](https://chanzuckerberg.github.io/scRNA-python-workshop/analysis/04-clustering.html)
 
-## Cluster the cells
+# Phân nhóm tế bào (Clustering)
 
-Seurat now includes an graph-based clustering approach compared to (Macosko et al.). Importantly, the distance metric which drives the clustering analysis (based on previously identified PCs) remains the same. However, our approach to partioning the cellular distance matrix into clusters has dramatically improved. Our approach was heavily inspired by recent manuscripts which applied graph-based clustering approaches to scRNA-seq data SNN-Cliq, Xu and Su, Bioinformatics, 2015 and CyTOF data PhenoGraph, Levine et al., Cell, 2015. Briefly, these methods embed cells in a graph structure - for example a K-nearest neighbor (KNN) graph, with edges drawn between cells with similar gene expression patterns, and then attempt to partition this graph into highly interconnected ‘quasi-cliques’ or ‘communities’. As in PhenoGraph, we first construct a KNN graph based on the euclidean distance in PCA space, and refine the edge weights between any two cells based on the shared overlap in their local neighborhoods (Jaccard similarity). To cluster the cells, we apply modularity optimization techniques such as the Louvain algorithm (default) or SLM SLM, Blondel et al., Journal of Statistical Mechanics, to iteratively group cells together, with the goal of optimizing the standard modularity function.
+## 1. Giới thiệu
 
-The FindClusters function implements the procedure, and contains a resolution parameter that sets the ‘granularity’ of the downstream clustering, with increased values leading to a greater number of clusters. We find that setting this parameter between 0.6-1.2 typically returns good results for single cell datasets of around 3K cells. Optimal resolution often increases for larger datasets. Latest clustering results will be stored in object metadata under seurat_clusters.
+Seurat hiện cung cấp các phương pháp phân nhóm tế bào dựa trên đồ thị. Nói một cách ngắn gọn, các phương pháp này nhúng các tế bào vào đồ thị (graph) - ví dụ đồ thị [K-nearest-neighbor](https://machinelearningcoban.com/2017/01/08/knn/) (KNN), với các dạnh được kết nối với nhau giữa các tế bào có gene expression tương tự. Sau đó, thuật toán cố gắng phân vùng graph này thành các `communities` (cộng đồng/nhóm nút) có tính liên kết với nhau cao. Đầu tiên, Seurat sẽ xây dựng một đồ thị KNN dựa vào [khoảng cách Euclid](https://vi.wikipedia.org/wiki/Kho%E1%BA%A3ng_c%C3%A1ch_Euclid) trong không gian PCA. Sau đó tinh chỉnh trọng số cạnh giữa các vùng lân cận cục bộ của chúng. Để phân nhóm các tế bào, Seurat áp dụng các kỹ thuật tối ưu hóa mô-đun như thuật toán [Louvain](https://python-louvain.readthedocs.io/en/latest/) (mặc định) hoặc [SLM](http://www.ludowaltman.nl/slm/), với mục tiêu tối ưu hóa chức năng mô-đun chuẩn.
 
-First calculate k-nearest neighbors and construct the SNN graph (FindNeighbors), then run FindClusters.
+Trong Seurat, hàm `FindClusters` có thể thực hiện phân nhóm, và tham số về độ phân giải (resolution) graph nhằm đặt ra mực độ chi tiết các cụm được phân nhóm, với giá trị càng lớn thì số lượng cụm sẽ càng lớn theo. Theo kinh nghiệm phân tích, việc đặt tham số này trong khoảng 0.6 - 1.2 thường trả về kết quả tốt cho các tập dữ liệu scRNAseq khoảng 3000 tế bào. Độ phân giải tối ưu thường tăng với các bộ dữ liệu lớn hơn. Kết quả phân nhóm mới nhất sẽ được lưu trữ trong phần metadata với tên `seurat_clusters`.
+
+Đầu tiên, chúng ta sẽ tính toán k-nearest neighbors và dựng đồ thị SNN (Shared nearest neightbor, một thuật toán khác phát triển từ KNN), sau đó chạy hàm `FindClusters`.
 
 ```R
 pbmc <- FindNeighbors(pbmc, reduction = "pca", dims = 1:20)
@@ -46,13 +48,17 @@ Number of communities: 6
 Elapsed time: 0 seconds
 ```
 
-## Visualize by tSNE
+## 2. Visualize by tSNE
+
+Chúng ta sẽ sử dụng không gian tSNE được tính từ phần trước để trực quan hóa các cụm tế bào được phân nhóm.
 
 ```R
 DimPlot(object = pbmc, reduction = "tsne")
 ```
 ![](../assets/images/Part6/plot_6_1.png)
-## Visualize by UMAP
+## 3. Visualize by UMAP
+
+Tương tự như vậy với UMAP.
 
 ```R
 DimPlot(pbmc, reduction = "umap")

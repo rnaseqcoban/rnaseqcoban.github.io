@@ -11,27 +11,29 @@ Source:
 
 [https://chanzuckerberg.github.io/scRNA-python-workshop/analysis/05-diffexp.html](https://chanzuckerberg.github.io/scRNA-python-workshop/analysis/05-diffexp.html)
 
-## Differential expression
+# Phân tích khác biệt biểu hiện gen
 
-Now that we've assigned cells into clusters, we'd like to understand what makes each cluster different from other cells in the dataset, or to annotate clusters according to their cell types (as has been previously done for this dataset).
+## 1. Giới thiệu
 
-There are several approaches to this task:
+Bây giờ chúng ta đã phân tế bào thành các nhóm khác nhau, câu hỏi đặt ra là điều gì đã làm cho mỗi nhóm khác biệt với các nhóm khác trong tập dữ liệu, hoặc để chú thích các nhóm theo loại tế bào của chúng.
 
-- Look for upregulation of marker genes for cell types of interest (compared to the rest of the dataset)
-- Compare the complete gene expression profiles between groups
-- Use automated methods to compare cells of interest to databases of cell type expression profiles to combine clustering and annotation
+Có nhiều cách để thực hiện bước này:
 
-Automated methods are a promising advance, but are not yet able to replace careful human curation.
+- Tìm kiếm các marker (dấu ấn) gene làm tăng điều hòa (upregulation) ở các loại tế bào đang quan tâm (so với phần còn lại của dữ liệu)
+- So sách toàn bộ gene expression giữa các nhóm
+- Sử dụng các phương pháp tự động so sánh với các tế bào trên cơ sở dữ liệu về biểu hiện gene của các loại tế bào đã được công bố giúp dễ dàng hơn trong việc chú giải loại tế bào.
 
-For well-defined cell types, we expect marker genes to show large differences in expression between the cell type of interest and the rest of the dataset, allowing us to use simple methods. We'll focus on this approach for this workshop, while building intuition that is broadly applicable to other approaches.
+Các phương pháp tự động là một tiến bộ đầy hứa hẹn, nhưng vẫn chưa thể thay đổi được sự cẩn thận của con người.
 
-## Comparing distributions 
+Đối với các loại tế bào được xác định rõ ràng, chúng ta hy vọng rằng các marker genes sẽ cho thấy rõ sự khác biệt trong biểu hiện của gene giữa các loại tế bào với toàn bộ phần còn lại của dữ liệu. Nó cho phép chúng ta có thể sử dụng nhưng phương pháp đơn giản và hiệu quả. Chúng ta sẽ nhắm vào phương pháp đơn giản trong bài này.
 
-Differential expression algorithms represent various approaches to comparing the distribution of gene expression in one group versus another group. Unlike bulk RNA-seq, we generally have a large number of samples (i.e. cells) for each group we are comparing in single-cell experiments. Thus, we can take advantage of the whole distribution of expression values in each group to identify differences between groups rather than only comparing estimates of mean-expression as is standard for bulk RNASeq.
+## 2. So sánh phân bố
 
-Seurat can help you find markers that define clusters via differential expression. By default, it identifes positive and negative markers of a single cluster (specified in ident.1), compared to all other cells. FindAllMarkers automates this process for all clusters, but you can also test groups of clusters vs. each other, or against all cells.
+Các thuật toán phân tích khác biệt biểu hiện gene cung cấp các cách tiếp cận khác nhau để so sánh sự phân bố của biểu hiện gene giữa một nhóm tế bào với một nhóm khác. Không giống như [Bulk RNA-seq](https://rpubs.com/ewilkinson_KRISP/479615), chúng ta thường có một số lượng lớn các mẫu (tế bào) cho mỗi nhóm mà chúng ta đang so sánh trong các thí nghiệm scRNAseq. Do đó, chúng ta có thể tận dụng toàn bộ phân phối của các giá trị trong mỗi nhóm để xác định sự khác biệt giữa các nhóm thay vì chỉ so sánh các ước tính của biểu hiện gene trung bình như tiêu chuẩn của Bulk RNASeq.
 
-The min.pct argument requires a gene to be detected at a minimum percentage in either of the two groups of cells, and the thresh.test argument requires a gene to be differentially expressed (on average) by some amount between the two groups. You can set both of these to 0, but with a dramatic increase in time - since this will test a large number of genes that are unlikely to be highly discriminatory. As another option to speed up these computations, max.cells.per.ident can be set. This will downsample each identity class to have no more cells than whatever this is set to. While there is generally going to be a loss in power, the speed increases can be significiant and the most highly differentially expressed genes will likely still rise to the top.
+Seurat có thể giúp bạn tìm các gene markers mà nó giúp xác định được phân loại của các nhóm tế bào thông qua sự khác biệt trong biểu hiện gên. Mặc định, đầu tiên thuật toán giúp xác định sự tăng và giảm trong biểu hiện gene của một nhóm tế bào so với tất cả các tế bào khác. Hàm `FindAllMarkers` giúp tự động hóa quy trình này cho tất cả các nhóm, nhưng bạn cũng có thể kiểm tra các nhóm so với nhau hoặc so với toàn bộ tế bào khi sử dụng hàm `FindMarkers`. 
+
+Tham số min.pct yêu cầu một gen được phát hiện ở một tỷ lệ phần trăm tối thiểu ở một trong hai nhóm tế bào và tham số `thresh.test` yêu cầu một gen phải được biểu hiện khác biệt (trung bình) theo một số lượng nhất định giữa hai nhóm. Bạn có thể đặt cả hai tham số này là 0, nhưng thời gian chạy hàm sẽ tăng lên đáng kể bởi vì điều này sẽ làm Seurat kiểm tra thêm một số lượng lớn các gen không có khả năng phân biệt cao. Ngoài ra, là một tùy chọn khác để tăng tốc thuật toán này, bạn có thể sử dụng tham số max.cells.per.ident. Tham số này giúp giảm số lượng mẫu (tế bào) cho mỗi nhóm. Mỗi nhóm này sẽ không có số lượng tế bào nhiều hơn giới hạn này. Mặc dù nói chung sẽ có sự mất mát về sức mạnh của thuật toán, nhưng tốc độ tăng vẫn có thể sẽ giúp được đưa các gene có biểu hiện khác biệt nhiều nhất lên trên cùng và hoàn toàn có ý nghĩa thống kê.
 
 
 ```R
@@ -84,13 +86,19 @@ Calculating cluster 5
   |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=01s  
 ```
 
-Seurat has several tests for differential expression which can be set with the test.use parameter (see our DE vignette for details). For example, the ROC test returns the ‘classification power’ for any individual marker (ranging from 0 - random, to 1 - perfect).
+Seurat có một số tùy chọn cho việc tests để phân tích khác biệt biểu hiện gene, nó có thể được xác định bằng tham số `test.use`. Ví dụ: kiểm tra [ROC](https://rstudio-pubs-static.s3.amazonaws.com/267441_5459af9d83ae44f18a13aea4a479f31f.html) trả về 'classification power' (độ mạnh của kết quả phân loại) cho bất kỳ gene marker riêng lẻ nào (từ 0 - ngẫu nhiên, đến 1 - hoàn hảo).
 
 ```R
 cluster1.markers <- FindMarkers(object = pbmc, ident.1 = 0, logfc.threshold = 0.25, test.use = "roc", only.pos = TRUE)
 ```
 
-We include several tools for visualizing marker expression. • VlnPlot (shows expression probability distributions across clusters), • and FeaturePlot (visualizes gene expression on a tSNE or PCA plot) are our most commonly used visualizations. We also suggest exploring: • RidgePlot, • CellPlot, and • DotPlot as additional methods to view your dataset.
+Seurat đưa vào khá nhiều các công cụ khác nhau để trực quan hóa kết quả.
+
+- `Vlplot` là hàm dùng để vẽ [Violin plot](https://en.wikipedia.org/wiki/Violin_plot) giúp hiển thị phân bố xác suất biểu hiện gene giữa các nhóm.
+
+- `FeaturePlot` là hàm dùng để hiển thị biểu hiện gene trên biểu đồ tSNE hoặc PCA. Hàm này thường được dùng khá phổ biến vì tính trực quan của nó.
+
+- `CellPlot`, `DotPlot` hay `RidgePlot` cũng là những phương pháp bổ sung để quan sát dữ liệu của bạn.
 
 ```R
 VlnPlot(object = pbmc, features =c("LYZ", "CD14"))
@@ -102,8 +110,8 @@ VlnPlot(object = pbmc, features =c("LYZ", "CD14"))
 FeaturePlot(object = pbmc, features = c("MS4A1", "GNLY", "CD3E", "CD14", "FCER1A", "FCGR3A", "LYZ", "PPBP", "CD8A"), cols = c("grey", "blue"), reduction = "tsne")
 ```
 ![](../assets/images/Part7/plot_7_2.png)
-DoHeatmap generates an expression heatmap for given cells and genes. In this case, we are plotting the top 20 markers (or all markers if less than 20) for each cluster.
 
+Hàm `DoHeatmap` tạo ra một biểu đồ nhiệt cho các tế bào và genes nhất định. Trong trường hợp này, chúng ta sẽ vẽ biểu đồ nhiệt với 20 gene markers hàng đầu (hoặc tất cả các markers nếu số lượng ít hơn 20) cho mỗi nhóm.
 
 ```R
 library(dplyr)
@@ -114,9 +122,10 @@ top10 <- pbmc.markers %>% group_by(cluster) %>% top_n(10, avg_logFC)
 DoHeatmap(object = pbmc, features = top10$gene, label = TRUE)
 ```
 ![](../assets/images/Part7/plot_7_4.png)
-## Assigning cell type identity to clusters
 
-Fortunately in the case of this dataset, we can use canonical markers to easily match the unbiased clustering to known cell types.
+## 3. Gán tên cho các loại tế bào
+
+Thông thường đây là bước khá là gây rối, nhưng may mắn đối với loại dữ liệu này, các gene marker biểu hiện rất rõ ràng và đại diện cho các loại tế bào có trong máu.
 
 ```R
 current.cluster.ids <- c(0, 1, 2, 3, 4, 5)

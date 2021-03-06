@@ -15,6 +15,7 @@ Source:
 
 https://broadinstitute.github.io/KrumlovSingleCellWorkshop2020/data-wrangling-scrnaseq-1.html
 
+# Tiền xử lý dữ liệu (Preprocessing)
 
 ## 1. Chuẩn hóa [library](https://en.wikipedia.org/wiki/CDNA_library) size tế bào
 

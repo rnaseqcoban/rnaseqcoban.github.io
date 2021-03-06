@@ -5,7 +5,7 @@ permalink: /pipeline/
 nav_order: 8
 ---
 
-#  Ideal scRNAseq pipeline (as of Oct 2017)
+#  Pipeline chuẩn cho scRNAseq (as of Oct 2017)
 
 ## Experimental Design
 * Avoid confounding biological and batch effects (Figure 10.1)
