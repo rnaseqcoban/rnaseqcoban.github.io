@@ -13,30 +13,35 @@ Source:
 
 # Giảm chiều dữ liệu (Dimensionality reduction)
 
-## Principle components analysis
+## Phân tích thành phần chính (Principal component analysis - PCA)
 
-Dimensionality reduction methods seek to take a large set of variables and return a smaller set of components that still contain most of the information in the original dataset.
+Các phương pháp giảm kích thước tìm cách lấy một tập hợp lớn dữ liệu và trả về một tập hợp nhỏ hơn với các thành phần vẫn chứa hầu hết thông tin trong tập dữ liệu gốc.
 
-One of the simplest forms of dimensionality reduction is PCA. Principal component analysis (PCA) is a mathematical procedure that transforms a number of possibly correlated (e.g., expression of genes in a network) variables into a (smaller) number of uncorrelated variables called principal components ("PCs").
+Một trong những hình thức giảm kích thước đơn giản nhất là PCA. Phân tích thành phần chính (PCA) là một phương pháp toán học giúp biến đổi một số biến số tương quan (ví dụ: gene expression) thành một số (nhỏ hơn) các biến không tương quan được gọi là thành phần chính ("PC").
 
-Mathematically, the PCs correspond to the eigenvectors of the covariance matrix. The eigenvectors are sorted by eigenvalue so that the first principal component accounts for as much of the variability in the data as possible, and each succeeding component in turn has the highest variance possible under the constraint that it is orthogonal to the preceding components (the figure below is taken from here).
-
-Biologically, this type of dimensionality reduction is useful and appropriate because cells respond to their environment by turning on regulatory programs that result in expression of modules of genes. As a result, gene expression displays structured co-expression, and dimnesionality reduction by principle component analysis groups those co-varying genes into principle components, ordered by how much variation they explain.
-
+Về mặt toán học, các PC tương ứng với các vector riêng (eigenvector) của ma trận hiệp phương sai. Các eigenvector được sắp xếp theo trị riêng (eigenvalue) để thành phần chính đầu tiên chiếm càng nhiều sự thay đổi (variability) trong dữ liệu càng tốt và mỗi thành phần tiếp theo lần lượt có phương sai cao nhất có thể với điều kiện là nó trực giao với các thành phần trước đó.
 
 ![](../assets/images/Part5/plot_5_1.png)
 
-Now that we have a clean expression matrix, we can use PCA to visualize an overview of the data and assess confounding factors. SCANPY provides several very useful functions to simplify visualisation.
+Về mặt sinh học, phương pháp giảm kích thước này hữu ích và thích hợp với dữ liệu scRNAseq vì tế bào phản ứng với môi trường của chúng bằng cách kích hoạt các chương trình điều hòa dẫn đến sự biểu hiện của mô-đun/gen. Kết quả là, sự biểu hiện gen hiển thị sự đồng biểu hiện có cấu trúc và giảm số chiều bằng cách  phân tích các gene đồng biến đổi đó thành các thành phần chính, được sắp xếp theo mức độ phương sai mà chúng giải thích được.
 
-## Perform linear dimensional reduction
+Khuyến khích các bạn đọc thêm bài này: [Link - Machine learning cơ bản](https://machinelearningcoban.com/2017/06/15/pca/)
 
-refered to Seurat v3 (latest): high variable features are accessed through the function HVFInfo(object). Despite RunPCA has a features argument where to specify the features to compute PCA on, I’ve been modifying its values and the output PCA graph has always the same dimensions, indicating that the provided genes in the features argument are not exactly the ones used to compute PCA. Wether the function gets the HVG directly or does not take them into account, I don’t know.
+## Thực hiện giảm số chiều tuyến tính
+
+Tham khảo phiên bản Seurat v3: các feature (cách gọi thay thế cho gene khi đưa vào mô hình toán học) có tính biến số cao (highly variable - có nghĩa là các gene này có độ biến đổi cao, biểu hiện thấp ở một số tế bào này, nhưng biểu hiện cao ở các tế bào khác) được phát hiện thông qua hàm `FindVariableFeatures` đã được thực hiện ở phần tiền xử lý dữ liệu. Chúng ta sẽ sử dụng các feature này khi đã được scale để thực hiện PCA.
 
 ```R
 pbmc <- RunPCA(object = pbmc,  npcs = 30, verbose = FALSE)
 ```
 
-Seurat v3 provides functions for visualizing: - PCA - PCA plot coloured by a quantitative feature - Scatter plot across single cells - Scatter plot across individual features - Variable Feature Plot - Violin and Ridge plots - Heatmaps
+Seurat v3 cung cấp các chức năng để trực quan hóa PCA: 
+
+- Biểu đồ PCA
+- Biểu đồ PCA được tô màu bởi một đối tượng định lượng (i.e gene) 
+- Biểu đồ phân tán (scatter)  
+- Biểu đồ Violin và Ridge 
+- Biểu đồ nhiệt
 
 ```R
 # Examine and visualize PCA results a few different ways
@@ -48,9 +53,10 @@ DimPlot(object = pbmc, reduction = "pca")
 FeaturePlot(object = pbmc, features = "MS4A1")
 ```
 ![](../assets/images/Part5/plot_5_3.png)
-In particular DimHeatmap allows for easy exploration of the primary sources of heterogeneity in a dataset, and can be useful when trying to decide which PCs to include for further downstream analyses. Both cells and genes are ordered according to their PCA scores. Setting cells.use to a number plots the ‘extreme’ cells on both ends of the spectrum, which dramatically speeds plotting for large datasets. Though clearly a supervised analysis, we find this to be a valuable tool for exploring correlated gene sets.
 
-## Determine statistically significant principal components
+Đặc biệt, `DimHeatmap` cho phép dễ dàng khám phá các nguyên nhân chính của sự không đồng nhất trong tập dữ liệu và nó rất hữu ích khi quyết định PC nào nên đưa vào cho các phân tích tiếp theo. Cả tế bào và gene đều được sắp xếp theo điểm số PCA của chúng. PCA là một phân tích rất có giá trị để khám phá các nhóm gen tương quan với nhau.
+
+## Xác định các thành phần chính có ý nghĩa thống kê
 
 To overcome the extensive technical noise in any single gene for scRNA-seq data, Seurat clusters cells based on their PCA scores, with each PC essentially representing a ‘metagene’ that combines information across a correlated gene set. Determining how many PCs to include downstream is therefore an important step.
 
