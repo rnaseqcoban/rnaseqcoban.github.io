@@ -15,9 +15,9 @@ Source:
 
 ## 1. Giới thiệu
 
-Once we have our expression matrix, it should be examined to remove poor quality cells which were not detected in the initial processing of the raw reads. Failure to remove low quality cells at this stage may add technical noise which has the potential to obscure the biological signals of interest in the downstream analysis.
-
-Since there is currently no standard method for performing scRNAseq, the expected values for the various QC measures that will be presented here can vary substantially from experiment to experiment. Thus, to perform QC we will be looking for cells which are outliers with respect to the rest of the dataset rather than comparing to independent quality standards. Consequently, care should be taken when comparing quality metrics across datasets collected using different protocols.
+Một khi đã có dữ liệu, chúng ta cần kiểm tra và loại bỏ các tế bào có dữ liệu kém. Sai sót trong việc loại bỏ các tế bào có dữ liệu kém có thể làm tăng nhiễu do kĩ thuât và ảnh hưởng tới việc tìm ra các thông tin mang ý nghĩa sinh học.
+ 
+Hiện tại chưa có quy trình chuẩn cho thí nghiệm scRNAseq, vậy nên các chỉ số kiểm tra chất lượng có thể biến đổi giữa các thí nghiệm. Khi kiểm tra chất lượng dữ liệu, chúng ta sẽ tìm những tế bào nằm ngoài vùng phân bố của phần lớn các tế bào còn lại. Lưu ý, khi so sánh chất lượng dữ liệu từ các quy trình khác nhau, chúng ta cần phải cân nhắc cẩn trọng.
 
 ## 2. Đọc dữ liệu
 
@@ -27,7 +27,7 @@ pbmc <- readRDS(file = "PBMC_1k.RDS")
 
 ## 3. Filter out low-quality cells
 
-The Seurat object initialization step above only considered cells that expressed at least 350 genes. Additionally, we would like to exclude cells that are damaged. A common metric to judge this (although by no means the only one) is the relative expression of mitochondrially derived genes. When the cells apoptose due to stress, their mitochondria becomes leaky and there is widespread RNA degradation. Thus a relative enrichment of mitochondrially derived genes can be a tell-tale sign of cell stress. Here, we compute the proportion of transcripts that are of mitochondrial origin for every cell (percent.mt), and visualize its distribution as a violin plot. We also use the FeatureScatter function to observe how percent.mt correlates with other metrics.
+Bước khởi đầu trong kiểm tra chất lượng Seurat Object là giữ lại các tế bào có tối thiểu 350 genes. Sau đó, dựa vào sự biểu hiện tương đối của các gene từ ti thể (mitochodrial gene) để loại bỏ các tế bào không còn nguyên vẹn. Khi tế bào bước vào chu trình chết tự nhiên gây ra bởi “stress”, ti thể bên trong tế bào này trở nên rò rỉ và RNA bị phá hỏng. Ở trong ví dụ này, chúng ta sẽ tính toán phần trăm các mitochrondial gene trên mỗi tế bào, thêm vào bảng dữ liệu, và biểu diễn chỉ số này bằng biểu đồ violin.
 
 ```R
 head(brain@meta.data)
