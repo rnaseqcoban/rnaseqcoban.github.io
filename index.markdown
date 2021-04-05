@@ -4,6 +4,12 @@ layout: home
 
 # Phân tích dữ liệu single cell RNA-seq
 
+Bạn có thể tham gia vào 2 khóa học sau đây:
+
+[Phân tích dữ liệu scRNA-seq với R](https://rnaseqcoban.github.io/R){: .btn}
+
+[Phân tích dữ liệu scRNA-seq với Python (Đang cập nhật)](){: .btn}
+
 ## Giới thiệu về blog
 
 Single cell RNA-seq (scRNAseq) là một trong những công nghệ hàng đầu hiện nay để tìm hiểu hoạt động của tế bào ở cấp độ phân tử trong lĩnh vực công nghệ sinh học. Chúng tôi tạo ra blog này với mục đích giúp các bạn sinh viên, nghiên cứu sinh Việt Nam tiếp cận dễ dàng hơn với lĩnh vực này thông qua ngôn ngữ tiếng Việt. Chúng tôi tổng hợp và dịch từ 3 nguồn chính sau đây:
@@ -13,6 +19,7 @@ Single cell RNA-seq (scRNAseq) là một trong những công nghệ hàng đầu
 | Sanger| [ScRNAseq course](https://scrnaseq-course.cog.sanger.ac.uk/website/index.html)|
 | Chan Zuckerberg Initiative| [scRNA Python workshop](https://chanzuckerberg.github.io/scRNA-python-workshop/intro/about.html)|
 | NBI Sweden|[Excelerate scRNAseq course](https://nbisweden.github.io/excelerate-scRNAseq/)|
+
 
 ## Về khóa học
 
