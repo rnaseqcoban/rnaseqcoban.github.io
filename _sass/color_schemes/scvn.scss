@@ -25,3 +25,206 @@ $nav-width: 300px;
     margin-left: $nav-width;
   }
 }
+
+.highlight {
+  pre, .hll {
+    background-color: #222222;
+  }
+
+  .c {
+    color: #000080;
+  }
+
+  .err {
+    color: #cccccc;
+    border: 1px solid #FF0000;
+  }
+
+  .g {
+    color: #cccccc;
+  }
+
+  .k {
+    color: #cdcd00;
+  }
+
+  .l, .n {
+    color: #cccccc;
+  }
+
+  .o {
+    color: #3399cc;
+  }
+
+  .x, .p {
+    color: #cccccc;
+  }
+
+  .cm, .cp, .c1 {
+    color: #000080;
+  }
+
+  .cs {
+    color: #cd0000;
+    font-weight: bold;
+  }
+
+  .gd {
+    color: #cd0000;
+  }
+
+  .ge {
+    color: #cccccc;
+    font-style: italic;
+  }
+
+  .gr {
+    color: #FF0000;
+  }
+
+  .gh {
+    color: #000080;
+    font-weight: bold;
+  }
+
+  .gi {
+    color: #00cd00;
+  }
+
+  .go {
+    color: #808080;
+  }
+
+  .gp {
+    color: #000080;
+    font-weight: bold;
+  }
+
+  .gs {
+    color: #cccccc;
+    font-weight: bold;
+  }
+
+  .gu {
+    color: #800080;
+    font-weight: bold;
+  }
+
+  .gt {
+    color: #0040D0;
+  }
+
+  .kc {
+    color: #cdcd00;
+  }
+
+  .kd {
+    color: #00cd00;
+  }
+
+  .kn {
+    color: #cd00cd;
+  }
+
+  .kp, .kr {
+    color: #cdcd00;
+  }
+
+  .kt {
+    color: #00cd00;
+  }
+
+  .ld {
+    color: #cccccc;
+  }
+
+  .m {
+    color: #cd00cd;
+  }
+
+  .s {
+    color: #cd0000;
+  }
+
+  .na {
+    color: #cccccc;
+  }
+
+  .nb {
+    color: #cd00cd;
+  }
+
+  .nc {
+    color: #00cdcd;
+  }
+
+  .no, .nd, .ni {
+    color: #cccccc;
+  }
+
+  .ne {
+    color: #666699;
+    font-weight: bold;
+  }
+
+  .nf, .nl, .nn, .nx, .py, .nt {
+    color: #cccccc;
+  }
+
+  .nv {
+    color: #00cdcd;
+  }
+
+  .ow {
+    color: #cdcd00;
+  }
+
+  .w {
+    color: #cccccc;
+  }
+
+  .mf, .mh, .mi, .mo {
+    color: #cd00cd;
+  }
+
+  .sb, .sc, .sd, .s2, .se, .sh, .si, .sx, .sr, .s1, .ss {
+    color: #cd0000;
+  }
+
+  .bp {
+    color: #cd00cd;
+  }
+
+  .vc, .vg, .vi {
+    color: #00cdcd;
+  }
+
+  .il {
+    color: #cd00cd;
+  }
+}
+
+div.highlighter-rouge {
+  padding: 0.75rem;
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  overflow-x: auto;
+  background-color: #222222 !important;
+  border-radius: 4px;
+  box-shadow: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+code {
+  padding: 0.2em 0.15em;
+  font-weight: 400;
+
+  background-color: #222222 !important;
+  border: 1px solid #eeebee;
+  border-radius: 4px;
+}
+
+code.language-plaintext {
+  background-color: white !important;
+  color: red;
+}

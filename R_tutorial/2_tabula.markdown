@@ -14,7 +14,7 @@ parent: Hướng dẫn phiên bản R
 
 ## 1. Dữ liệu Tabula Muris
 
-Trong phần hướng dẫn này, chúng ta sẽ sử dụng dữ liệu <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#scrna-seq" data-tooltip="{{site.data.dict.ScRNA_seq}}"  data-tooltip-location="top">scRNA-seq</a> từ dự án Tabula Muris. Đây là dự án hợp tác quốc tế nhằm tìm ra thông tin sinh học phân tử của tất của các loại tế bào trên chuột ở cấp độ phiên mã (transcriptomics level). Họ kết hợp giữa giải trình tự <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#thông-lượng" data-tooltip="{{site.data.dict.Thong_luong}}"  data-tooltip-location="top">thông lượng</a> cao, có <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#coverageđộ-phủ" data-tooltip="{{site.data.dict.Coverage}}"  data-tooltip-location="top">độ phủ</a> thấp 10X (tên platform) với giải trình tự <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#thông-lượng" data-tooltip="{{site.data.dict.Thong_luong}}"  data-tooltip-location="top">thông lượng</a> thấp, <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#coverageđộ-phủ" data-tooltip="{{site.data.dict.Coverage}}"  data-tooltip-location="top">độ phủ</a> cao FACS-sorted cells Smartseq2 (tên của protocol). Ở blog này, chúng ta sẽ chỉ sử dụng dữ liệu Smartseq2.
+Trong phần hướng dẫn này, chúng ta sẽ sử dụng dữ liệu <a target="_blank" href="https://rnaseqcoban.github.io/def/#scrna-seq" data-tooltip="{{site.data.dict.ScRNA_seq}}"  data-tooltip-location="top">scRNA-seq</a> từ dự án Tabula Muris. Đây là dự án hợp tác quốc tế nhằm tìm ra thông tin sinh học phân tử của tất của các loại tế bào trên chuột ở cấp độ phiên mã (transcriptomics level). Họ kết hợp giữa giải trình tự <a target="_blank" href="https://rnaseqcoban.github.io/def/#thông-lượng" data-tooltip="{{site.data.dict.Thong_luong}}"  data-tooltip-location="top">thông lượng</a> cao, có <a target="_blank" href="https://rnaseqcoban.github.io/def/#coverageđộ-phủ" data-tooltip="{{site.data.dict.Coverage}}"  data-tooltip-location="top">độ phủ</a> thấp 10X (tên platform) với giải trình tự <a target="_blank" href="https://rnaseqcoban.github.io/def/#thông-lượng" data-tooltip="{{site.data.dict.Thong_luong}}"  data-tooltip-location="top">thông lượng</a> thấp, <a target="_blank" href="https://rnaseqcoban.github.io/def/#coverageđộ-phủ" data-tooltip="{{site.data.dict.Coverage}}"  data-tooltip-location="top">độ phủ</a> cao FACS-sorted cells Smartseq2 (tên của protocol). Ở blog này, chúng ta sẽ chỉ sử dụng dữ liệu Smartseq2.
 
 Dữ liệu này lần đầu tiên công bố vào tháng 12 năm 2017, bao gồm khoảng 100,000 tế bào thu thập được từ các mô/cơ quan khác nhau của chuột. Các bạn có thể dựa vào code trong phần hướng dẫn để thay đổi loại mô/cơ quan mà các bạn muốn phân tích.
 
@@ -26,7 +26,7 @@ Sau khi tải về, bạn giải nén và giữ lại 2 files: `brain_counts.csv
 
 ## 3. Đọc dữ liệu
 
-Chúng ta có thể đọc dữ liệu từ count matrix từ file .csv. Sau đó quan sát thử <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#dataframe" data-tooltip="{{site.data.dict.Dataframe}}"  data-tooltip-location="top">dataframe</a> (bảng):
+Chúng ta có thể đọc dữ liệu từ count matrix từ file .csv. Sau đó quan sát thử <a target="_blank" href="https://rnaseqcoban.github.io/def/#dataframe" data-tooltip="{{site.data.dict.Dataframe}}"  data-tooltip-location="top">dataframe</a> (bảng):
 ```R
 dat <- read.delim("brain_counts.csv", sep=",", header=TRUE, row.names = 1)
 dat[1:5,1:5]
@@ -50,7 +50,7 @@ dim(dat)
 ```console
 [1]  3401 23434
 ```
-Bây giờ, chúng ta có thể tách một số <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#metadata" data-tooltip="{{site.data.dict.Metadata}}"  data-tooltip-location="top">metadata</a> từ tên cột:
+Bây giờ, chúng ta có thể tách một số <a target="_blank" href="https://rnaseqcoban.github.io/def/#metadata" data-tooltip="{{site.data.dict.Metadata}}"  data-tooltip-location="top">metadata</a> từ tên cột:
 
 ```R
 # Lấy tất cả các cell id ở tên dòng
@@ -87,10 +87,10 @@ celltype <- ann[,3]
 ```
 
 ## 4. Tạo object
-Để tính toán hiệu quả hơn thì chúng ta cần đưa các dữ liệu vào các loại object khác nhau và tính toán toàn bộ xung quanh object đó. Ở đây chúng ta sẽ thử 2 loại object khác nhau là SingleCellExperiment và <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#seurat-object" data-tooltip="{{site.data.dict.Seurat_Object}}"  data-tooltip-location="top">Seurat object</a> (xem thêm ở phần setup).
+Để tính toán hiệu quả hơn thì chúng ta cần đưa các dữ liệu vào các loại object khác nhau và tính toán toàn bộ xung quanh object đó. Ở đây chúng ta sẽ thử 2 loại object khác nhau là SingleCellExperiment và <a target="_blank" href="https://rnaseqcoban.github.io/def/#seurat-object" data-tooltip="{{site.data.dict.Seurat_Object}}"  data-tooltip-location="top">Seurat object</a> (xem thêm ở phần setup).
 
 ### 4.1. SingleCellExperiment
-Để tạo ra SingleCellExperiment object, chúng ta cần đưa tất cả thông tin chú giải tế bào vào 1 <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#dataframe" data-tooltip="{{site.data.dict.Dataframe}}"  data-tooltip-location="top">dataframe</a> duy nhất.
+Để tạo ra SingleCellExperiment object, chúng ta cần đưa tất cả thông tin chú giải tế bào vào 1 <a target="_blank" href="https://rnaseqcoban.github.io/def/#dataframe" data-tooltip="{{site.data.dict.Dataframe}}"  data-tooltip-location="top">dataframe</a> duy nhất.
 
 ```R
 library("SingleCellExperiment")
@@ -103,7 +103,7 @@ sceset <- SingleCellExperiment(assays = list(counts = as.matrix(t(dat))), colDat
 ```
 
 ### 4.2. Seurat
-Seurat là một trong những package phổ biến nhất hiện tại trong xử lý dữ liệu <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#scrna-seq" data-tooltip="{{site.data.dict.ScRNA_seq}}"  data-tooltip-location="top">scRNAseq</a>.
+Seurat là một trong những package phổ biến nhất hiện tại trong xử lý dữ liệu <a target="_blank" href="https://rnaseqcoban.github.io/def/#scrna-seq" data-tooltip="{{site.data.dict.ScRNA_seq}}"  data-tooltip-location="top">scRNAseq</a>.
 
 ```R
 library("Seurat")
@@ -122,13 +122,13 @@ An object of class Seurat
 Active assay: RNA (23433 features, 0 variable features)
 ```
 
-Chúng ta có thể lưu lại <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#seurat-object" data-tooltip="{{site.data.dict.Seurat_Object}}"  data-tooltip-location="top">Seurat object</a> bằng cách:
+Chúng ta có thể lưu lại <a target="_blank" href="https://rnaseqcoban.github.io/def/#seurat-object" data-tooltip="{{site.data.dict.Seurat_Object}}"  data-tooltip-location="top">Seurat object</a> bằng cách:
 
 ```R
 saveRDS(brain, file = "brain_seurat.RDS")
 ```
 
-Sau đó, bạn có thể đọc lại <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#seurat-object" data-tooltip="{{site.data.dict.Seurat_Object}}"  data-tooltip-location="top">Seurat object</a> bất cứ lúc nào:
+Sau đó, bạn có thể đọc lại <a target="_blank" href="https://rnaseqcoban.github.io/def/#seurat-object" data-tooltip="{{site.data.dict.Seurat_Object}}"  data-tooltip-location="top">Seurat object</a> bất cứ lúc nào:
 
 ```R
 brain <- readRDS(file = "brain_seurat.RDS")
@@ -138,7 +138,7 @@ brain <- readRDS(file = "brain_seurat.RDS")
 
 ## 1. Dữ liệu Peripheral blood mononuclear cells (PBMC)
 
-Dữ liệu PBMCs là dữ liệu <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#scrna-seq" data-tooltip="{{site.data.dict.ScRNA_seq}}"  data-tooltip-location="top">scRNA-seq</a> miễn phí từ công ty 10X Genomics. PBMSs là các tế bào đơn nhân trong máu ngoại vi. Trong bài này chúng ta sẽ sử dụng mẫu từ những người hiến tặng khỏe mạnh.
+Dữ liệu PBMCs là dữ liệu <a target="_blank" href="https://rnaseqcoban.github.io/def/#scrna-seq" data-tooltip="{{site.data.dict.ScRNA_seq}}"  data-tooltip-location="top">scRNA-seq</a> miễn phí từ công ty 10X Genomics. PBMSs là các tế bào đơn nhân trong máu ngoại vi. Trong bài này chúng ta sẽ sử dụng mẫu từ những người hiến tặng khỏe mạnh.
 
 ## 2. Tải dữ liệu scRNA-seq
 
@@ -169,11 +169,11 @@ Seurat cung cấp 1 hàm để đọc dữ liệu từ file `.h5` là `Read10X_h
 v3 <- Read10X_h5("./pbmc_1k_v3_filtered_feature_bc_matrix.h5")
 ```
 
-`v3` lúc này sẽ là <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#count-matrixexpression-matrix" data-tooltip="{{site.data.dict.Count_matrix}}"  data-tooltip-location="top">Expression matrix</a> ở dạng <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#sparse-matrix" data-tooltip="{{site.data.dict.Sparse_matrix}}"  data-tooltip-location="top">sparse matrix</a> giúp tối ưu việc lưu trữ dữ liệu. Về cơ bản cũng là một <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#count-matrixexpression-matrix" data-tooltip="{{site.data.dict.Count_matrix}}"  data-tooltip-location="top">Expression matrix</a> để chúng ta có thể đưa vào <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#seurat-object" data-tooltip="{{site.data.dict.Seurat_Object}}"  data-tooltip-location="top">Seurat object</a>.
+`v3` lúc này sẽ là <a target="_blank" href="https://rnaseqcoban.github.io/def/#count-matrixexpression-matrix" data-tooltip="{{site.data.dict.Count_matrix}}"  data-tooltip-location="top">Expression matrix</a> ở dạng <a target="_blank" href="https://rnaseqcoban.github.io/def/#sparse-matrix" data-tooltip="{{site.data.dict.Sparse_matrix}}"  data-tooltip-location="top">sparse matrix</a> giúp tối ưu việc lưu trữ dữ liệu. Về cơ bản cũng là một <a target="_blank" href="https://rnaseqcoban.github.io/def/#count-matrixexpression-matrix" data-tooltip="{{site.data.dict.Count_matrix}}"  data-tooltip-location="top">Expression matrix</a> để chúng ta có thể đưa vào <a target="_blank" href="https://rnaseqcoban.github.io/def/#seurat-object" data-tooltip="{{site.data.dict.Seurat_Object}}"  data-tooltip-location="top">Seurat object</a>.
 
 ## 4. Tạo object
 
-Đưa dữ liệu PBMCs và tạo <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#seurat-object" data-tooltip="{{site.data.dict.Seurat_Object}}"  data-tooltip-location="top">Seurat object</a>.
+Đưa dữ liệu PBMCs và tạo <a target="_blank" href="https://rnaseqcoban.github.io/def/#seurat-object" data-tooltip="{{site.data.dict.Seurat_Object}}"  data-tooltip-location="top">Seurat object</a>.
 
 ```R
 # Tạo Seurat object

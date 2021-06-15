@@ -12,7 +12,7 @@ parent: Hướng dẫn phiên bản R
 
 Một khi đã có dữ liệu, chúng ta cần kiểm tra và loại bỏ các tế bào có chất lượng dữ liệu kém. Sai sót trong việc loại bỏ các tế bào có dữ liệu kém có thể làm nhiễu dữ liệu và ảnh hưởng tới việc tìm ra các thông tin mang ý nghĩa sinh học.
  
-Hiện tại chưa có quy trình chuẩn cho thí nghiệm <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#scrna-seq" data-tooltip="{{site.data.dict.ScRNA_seq}}"  data-tooltip-location="top">scRNA-seq</a>, vậy nên các chỉ số kiểm tra chất lượng có thể biến đổi giữa các thí nghiệm. Khi kiểm tra chất lượng dữ liệu, chúng ta sẽ tìm những tế bào nằm ngoài vùng phân bố của phần lớn các tế bào còn lại. Lưu ý, khi so sánh chất lượng dữ liệu từ các quy trình khác nhau, chúng ta cần phải cân nhắc cẩn trọng.
+Hiện tại chưa có quy trình chuẩn cho thí nghiệm <a target="_blank" href="https://rnaseqcoban.github.io/def/#scrna-seq" data-tooltip="{{site.data.dict.ScRNA_seq}}"  data-tooltip-location="top">scRNA-seq</a>, vậy nên các chỉ số kiểm tra chất lượng có thể biến đổi giữa các thí nghiệm. Khi kiểm tra chất lượng dữ liệu, chúng ta sẽ tìm những tế bào nằm ngoài vùng phân bố của phần lớn các tế bào còn lại. Lưu ý, khi so sánh chất lượng dữ liệu từ các quy trình khác nhau, chúng ta cần phải cân nhắc cẩn trọng.
 
 ## 2. Đọc dữ liệu
 
@@ -22,7 +22,7 @@ pbmc <- readRDS(file = "PBMC_1k.RDS")
 
 ## 3. Lọc bỏ tế bào kém chất lượng
 
-Bước đầu trong kiểm tra chất lượng <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#seurat-object" data-tooltip="{{site.data.dict.Seurat_Object}}" data-tooltip-location="top">Seurat object</a> là dựa vào sự biểu hiện tương đối của các gene từ ti thể (mitochodrial gene) để loại bỏ các tế bào không còn nguyên vẹn. Khi tế bào bước vào chu trình chết tự nhiên gây ra bởi “stress”, ti thể bên trong tế bào bị rò rỉ và RNA bị phá hỏng. Trong ví dụ này, chúng ta sẽ tính toán phần trăm các mitochrondial gene trên mỗi tế bào, thêm vào bảng dữ liệu, và biểu diễn chỉ số này bằng biểu đồ violin.
+Bước đầu trong kiểm tra chất lượng <a target="_blank" href="https://rnaseqcoban.github.io/def/#seurat-object" data-tooltip="{{site.data.dict.Seurat_Object}}" data-tooltip-location="top">Seurat object</a> là dựa vào sự biểu hiện tương đối của các gene từ ti thể (mitochodrial gene) để loại bỏ các tế bào không còn nguyên vẹn. Khi tế bào bước vào chu trình chết tự nhiên gây ra bởi “stress”, ti thể bên trong tế bào bị rò rỉ và RNA bị phá hỏng. Trong ví dụ này, chúng ta sẽ tính toán phần trăm các mitochrondial gene trên mỗi tế bào, thêm vào bảng dữ liệu, và biểu diễn chỉ số này bằng biểu đồ violin.
 
 ```R
 head(brain@meta.data)
@@ -38,7 +38,7 @@ AAAGAACGTCTGCAAT-1 SeuratProject       6592         1831
 AAAGGATAGTAGACAT-1 SeuratProject       8845         2048
 ```
 
-Ở đây, chúng ta tính toán phần trăm đoạn đọc của mitochondria gene và thêm 1 cột tên "percent.mito" vào meta.data của <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#seurat-object" data-tooltip="{{site.data.dict.Seurat_Object}}"  data-tooltip-location="top">Seurat object</a>. Như vậy, chúng ta có thể dùng phương trình violin plot để biểu diễn "percent.mito". 
+Ở đây, chúng ta tính toán phần trăm đoạn đọc của mitochondria gene và thêm 1 cột tên "percent.mito" vào meta.data của <a target="_blank" href="https://rnaseqcoban.github.io/def/#seurat-object" data-tooltip="{{site.data.dict.Seurat_Object}}"  data-tooltip-location="top">Seurat object</a>. Như vậy, chúng ta có thể dùng phương trình violin plot để biểu diễn "percent.mito". 
 
 Tìm mitochondiral genes bắt đầu bằng MT-
 

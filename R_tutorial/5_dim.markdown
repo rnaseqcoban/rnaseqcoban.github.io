@@ -12,19 +12,19 @@ parent: Hướng dẫn phiên bản R
 
 Các phương pháp giảm kích thước tìm cách lấy một tập hợp lớn dữ liệu và trả về một tập hợp nhỏ hơn với các thành phần vẫn chứa hầu hết thông tin trong tập dữ liệu gốc.
 
-Một trong những hình thức giảm kích thước đơn giản nhất là PCA. Phân tích thành phần chính (PCA) là một phương pháp toán học giúp biến đổi một số biến số tương quan (ví dụ: <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#gene-expressionbiểu-hiện-gene" data-tooltip="{{site.data.dict.Gene_expression}}"  data-tooltip-location="top">gene expression</a>) thành một số (nhỏ hơn) các biến không tương quan được gọi là thành phần chính ("PC").
+Một trong những hình thức giảm kích thước đơn giản nhất là PCA. Phân tích thành phần chính (PCA) là một phương pháp toán học giúp biến đổi một số biến số tương quan (ví dụ: <a target="_blank" href="https://rnaseqcoban.github.io/def/#gene-expressionbiểu-hiện-gene" data-tooltip="{{site.data.dict.Gene_expression}}"  data-tooltip-location="top">gene expression</a>) thành một số (nhỏ hơn) các biến không tương quan được gọi là thành phần chính ("PC").
 
 Về mặt toán học, các PC tương ứng với các vector riêng (eigenvector) của ma trận hiệp phương sai. Các eigenvector được sắp xếp theo trị riêng (eigenvalue) để thành phần chính đầu tiên chiếm càng nhiều sự thay đổi (variability) trong dữ liệu càng tốt và mỗi thành phần tiếp theo lần lượt có phương sai cao nhất có thể với điều kiện là nó trực giao với các thành phần trước đó.
 
 ![](../assets/images/Part5/plot_5_1.png)
 
-Về mặt sinh học, phương pháp giảm kích thước này hữu ích và thích hợp với dữ liệu <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#scrna-seq" data-tooltip="{{site.data.dict.ScRNA_seq}}"  data-tooltip-location="top">scRNAseq</a> vì tế bào phản ứng với môi trường của chúng bằng cách kích hoạt các chương trình điều hòa dẫn đến sự biểu hiện của mô-đun/gen. Kết quả là, sự biểu hiện gene hiển thị sự đồng biểu hiện có cấu trúc và giảm số chiều bằng cách phân tích các gene đồng biến đổi đó thành các thành phần chính, được sắp xếp theo mức độ phương sai mà chúng giải thích được.
+Về mặt sinh học, phương pháp giảm kích thước này hữu ích và thích hợp với dữ liệu <a target="_blank" href="https://rnaseqcoban.github.io/def/#scrna-seq" data-tooltip="{{site.data.dict.ScRNA_seq}}"  data-tooltip-location="top">scRNAseq</a> vì tế bào phản ứng với môi trường của chúng bằng cách kích hoạt các chương trình điều hòa dẫn đến sự biểu hiện của mô-đun/gen. Kết quả là, sự biểu hiện gene hiển thị sự đồng biểu hiện có cấu trúc và giảm số chiều bằng cách phân tích các gene đồng biến đổi đó thành các thành phần chính, được sắp xếp theo mức độ phương sai mà chúng giải thích được.
 
 Khuyến khích các bạn đọc thêm bài này: [Link - Machine learning cơ bản](https://machinelearningcoban.com/2017/06/15/pca/)
 
 ## Thực hiện giảm số chiều tuyến tính
 
-Tham khảo phiên bản Seurat v3: các feature (cách gọi thay thế cho gene khi đưa vào mô hình toán học) có tính biến số cao (highly variable - có nghĩa là các gene này có độ biến đổi cao, biểu hiện thấp ở một số tế bào này, nhưng biểu hiện cao ở các tế bào khác) được phát hiện thông qua hàm `FindVariableFeatures` đã được thực hiện ở phần tiền xử lý dữ liệu. Chúng ta sẽ sử dụng các feature này khi đã được <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#scale" data-tooltip="{{site.data.dict.Scale}}"  data-tooltip-location="top">scale</a> để thực hiện PCA.
+Tham khảo phiên bản Seurat v3: các feature (cách gọi thay thế cho gene khi đưa vào mô hình toán học) có tính biến số cao (highly variable - có nghĩa là các gene này có độ biến đổi cao, biểu hiện thấp ở một số tế bào này, nhưng biểu hiện cao ở các tế bào khác) được phát hiện thông qua hàm `FindVariableFeatures` đã được thực hiện ở phần tiền xử lý dữ liệu. Chúng ta sẽ sử dụng các feature này khi đã được <a target="_blank" href="https://rnaseqcoban.github.io/def/#scale" data-tooltip="{{site.data.dict.Scale}}"  data-tooltip-location="top">scale</a> để thực hiện PCA.
 
 ```R
 pbmc <- RunPCA(object = pbmc,  npcs = 30, verbose = FALSE)
@@ -53,7 +53,7 @@ FeaturePlot(object = pbmc, features = "MS4A1")
 
 ## Xác định các thành phần chính có ý nghĩa thống kê
 
-Để tránh trường hợp có quá nhiều nhiễu do lỗi kĩ thuật trong dữ liệu <a target="_blank" href="https://rnaseqcoban.github.io/R/def//#scrna-seq" data-tooltip="{{site.data.dict.ScRNA_seq}}"  data-tooltip-location="top">scRNAseq</a>, Seurat phân cụm tế bào dựa trên PCA score, với mỗi PC đại diện cho một "metagene" kết hợp một tập hợp các gene có liên quan với nhau. Vì vậy, bước xác định số lượng PC dùng trong những phân tích tiếp theo là rất quan trọng.   
+Để tránh trường hợp có quá nhiều nhiễu do lỗi kĩ thuật trong dữ liệu <a target="_blank" href="https://rnaseqcoban.github.io/def/#scrna-seq" data-tooltip="{{site.data.dict.ScRNA_seq}}"  data-tooltip-location="top">scRNAseq</a>, Seurat phân cụm tế bào dựa trên PCA score, với mỗi PC đại diện cho một "metagene" kết hợp một tập hợp các gene có liên quan với nhau. Vì vậy, bước xác định số lượng PC dùng trong những phân tích tiếp theo là rất quan trọng.   
 
 Trong Macoske et al., chúng ta tiến hành phép thử "resampling" (lấy mẫu lại), từ jackStraw procedure. Chúng ta tạo ngẫu nhiên một tập dữ liệu nhỏ (1% by default), chạy PCA, tạo một "null distribution" của biểu hiện gene, và lặp lại quá trình này. Từ phép thử này, chúng ta xác định số lượng PCs biểu diễn nhiều gene có giá trị p-value thấp. 
 
