@@ -53,6 +53,8 @@ plugins:
 #   - vendor/ruby/
 remote_theme: pmarsceill/just-the-docs
 
+# Footer content
+footer_content: "Copyright &copy; 2021 Duy Pham. Distributed by an <a href=\"https://github.com/pmarsceill/just-the-docs/tree/master/LICENSE.txt\">MIT license.</a>"
 
 
 # Color scheme supports "light" (default) and "dark"
