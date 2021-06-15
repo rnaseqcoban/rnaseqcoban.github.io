@@ -2,9 +2,9 @@
 
 Bạn có thể tham gia vào 2 khóa học sau đây:
 
-[Phân tích dữ liệu scRNA-seq với R](https://rnaseqcoban.github.io/R_tutorial/setup){: .btn}
+[Phân tích dữ liệu scRNA-seq với R](https://rnaseqcoban.github.io/R_tutorial/setup)
 
-[Phân tích dữ liệu scRNA-seq với Python (Đang cập nhật)](){: .btn}
+[Phân tích dữ liệu scRNA-seq với Python (Đang cập nhật)]()
 
 ## Giới thiệu về blog
 
@@ -26,7 +26,7 @@ Trong khóa học này, chúng ta sẽ thảo luận về một số câu hỏi 
 Các công cụ tính toán đang được phát triển liên tục và tăng lên mỗi ngày, vì vậy chúng tôi sẽ cố gắng hết sức để cập nhật những gì hiện có. Chúng tôi sẽ chia làm 2 khóa học hướng dẫn trên 2 ngôn ngữ khác nhau: R và Python (Đang cập nhật).
 ## Contributors
 
-Trong tương lai, có thể chúng tôi sẽ cần thêm các bạn cộng tác viên giúp dịch hoặc viết các bài blog về lĩnh vực scRNA-seq. Nếu bạn có thời gian, vui lòng liên hệ vào email phamduychv94@gmail hoặc tạo issue trong github repository: [https://github.com/rnaseqcoban/rnaseqcoban.github.io/issues)./issues](https://github.com/rnaseqcoban/rnaseqcoban.github.io/issues).
+Trong tương lai, có thể chúng tôi sẽ cần thêm các bạn cộng tác viên giúp dịch hoặc viết các bài blog về lĩnh vực scRNA-seq. Nếu bạn có thời gian, vui lòng liên hệ vào email phamduychv94@gmail hoặc tạo issue trong github repository: [https://github.com/rnaseqcoban/rnaseqcoban.github.io/issues](https://github.com/rnaseqcoban/rnaseqcoban.github.io/issues).
 
 | Tên       | Email |
 | ----------- | ----------- |
