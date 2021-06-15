@@ -1,8 +1,11 @@
 ---
-layout: home
+layout: default
 
-title: Trang chủ
-nav_order: 1
+title: Hướng dẫn phiên bản R
+nav_order: 2
+has_children: true
+
+
 ---
 
 # Phân tích dữ liệu single cell RNA-seq

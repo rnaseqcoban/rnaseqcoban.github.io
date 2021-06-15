@@ -18,4 +18,3 @@ gem "just-the-docs"
 gem "github-pages"
 
 gem "jekyll-remote-theme"
-gem "jekyll-redirect-from"
