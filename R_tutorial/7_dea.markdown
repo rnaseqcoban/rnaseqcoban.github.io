@@ -116,7 +116,7 @@ top10 <- pbmc.markers %>% group_by(cluster) %>% top_n(10, avg_logFC)
 # every cell name
 DoHeatmap(object = pbmc, features = top10$gene, label = TRUE)
 ```
-![](../assets/images/Part7/plot_7_4.png)
+![](../assets/images/Part7/plot_7_3.png)
 
 ## 3. Gán tên cho các loại tế bào
 
